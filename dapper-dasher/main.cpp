@@ -9,6 +9,27 @@ struct AnimData
     float runningTime;
 };
 
+bool isOnGround(AnimData data, int windowHeight)
+{
+    return data.pos.y >= windowHeight - data.rec.height;
+}
+
+AnimData updateAnimData(AnimData data, float deltaTime, int maxFrame)
+{
+    data.runningTime += deltaTime;
+    if (data.runningTime >= data.updateTime)
+    {
+        data.runningTime = 0.0;
+        data.rec.x = data.frame * data.rec.width;
+        data.frame++;
+        if (data.frame > maxFrame)
+        {
+            data.frame = 0;
+        }
+    }
+    return data;
+}
+
 int main()
 {
 
@@ -35,25 +56,21 @@ int main()
 
     Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
 
-    AnimData nebData{
-        {0.0, 0.0, nebula.width / 8.0f, nebula.height / 8.0f},                                // body of texture, calculate the size of each image in sprite sheet using local coordinates
-        {windowsDimensiosn[0], static_cast<float>(windowsDimensiosn[1] - nebula.height / 8)}, // where to place texture in game window
-        0,
-        1.0 / 12.0,
-        0
+    const int sizeOfNebulae = 10;
+    AnimData nebulae[sizeOfNebulae]{};
 
-    };
-
-    AnimData nebData2{
-        {0.0, 0.0, static_cast<float>(nebula.width / 8), static_cast<float>(nebula.height / 8)},
-        {windowsDimensiosn[0] + 300, static_cast<float>(windowsDimensiosn[1] - nebula.height / 8)},
-        0,
-        1.0 / 16.0,
-        0.0
-
-    };
-
-    AnimData nebulae[2]{nebData, nebData2};
+    for (int i = 0; i < sizeOfNebulae; i++)
+    {
+        nebulae[i].rec.x = 0.0;
+        nebulae[i].rec.y = 0.0;
+        nebulae[i].rec.width = nebula.width / 8.0;
+        nebulae[i].rec.height = nebula.height / 8.0;
+        nebulae[i].pos.y = windowsDimensiosn[1] - nebula.height / 8;
+        nebulae[i].pos.x = windowsDimensiosn[0] + i * 300;
+        nebulae[i].frame = 0;
+        nebulae[i].runningTime = 0.0;
+        nebulae[i].updateTime = 1.0 / 16.0;
+    }
 
     // nebula X velocity (pixels/second)
     int nebVel{-200};
@@ -76,7 +93,7 @@ int main()
         const float dT = GetFrameTime();
 
         // ground check
-        if (scarfydata.pos.y >= windowsDimensiosn[1] - scarfydata.rec.height)
+        if (isOnGround(scarfydata, windowsDimensiosn[1]))
         {
             velocity = 0;
             isInAir = false;
@@ -93,9 +110,10 @@ int main()
         }
 
         // update nebula position
-        nebulae[0].pos.x += nebVel * dT;
-
-        nebulae[1].pos.x += nebVel * dT;
+        for (int i = 0; i < sizeOfNebulae; i++)
+        {
+            nebulae[i].pos.x += nebVel * dT;
+        }
 
         // update scarfy position
         scarfydata.pos.y += velocity * dT;
@@ -105,50 +123,19 @@ int main()
 
         if (!isInAir)
         {
-
-            if (scarfydata.runningTime >= scarfydata.updateTime)
-            {
-                scarfydata.runningTime = 0;
-
-                // update animation frame
-                scarfydata.rec.x = scarfydata.frame * scarfydata.rec.width;
-                scarfydata.frame++;
-                if (scarfydata.frame > 5)
-                {
-                    scarfydata.frame = 0;
-                }
-            }
+            scarfydata = updateAnimData(scarfydata, dT, 5);
         }
 
-        if (nebulae[0].runningTime >= nebulae[0].updateTime)
+        for (int i = 0; i < sizeOfNebulae; i++)
         {
-            nebulae[0].runningTime = 0;
-
-            // update animation frame
-            nebulae[0].rec.x = nebulae[0].frame * nebulae[0].rec.width;
-            nebulae[0].frame++;
-            if (nebulae[0].frame > 7)
-            {
-                nebulae[0].frame = 0;
-            }
+            nebulae[i] = updateAnimData(nebulae[i], dT, 7);
         }
 
-        if (nebulae[1].runningTime >= nebulae[1].updateTime)
+        for (int i = 0; i < sizeOfNebulae; i++)
         {
-            nebulae[1].runningTime = 0;
-
-            // update animation frame
-            nebulae[1].rec.x = nebulae[1].frame * nebulae[1].rec.width;
-            nebulae[1].frame++;
-            if (nebulae[1].frame > 7)
-            {
-                nebulae[1].frame = 0;
-            }
+            DrawTextureRec(nebula, nebulae[i].rec, nebulae[i].pos, WHITE);
         }
-
         DrawTextureRec(scarfy, scarfydata.rec, scarfydata.pos, WHITE);
-        DrawTextureRec(nebula, nebulae[0].rec, nebulae[0].pos, WHITE);
-        DrawTextureRec(nebula, nebulae[1].rec, nebulae[1].pos, RED);
 
         EndDrawing();
     }
