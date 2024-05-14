@@ -1,4 +1,7 @@
+# Ignore all
+*
 *.exe
+*.class
 *.dsym
 main
   
@@ -7,3 +10,4 @@ main
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
