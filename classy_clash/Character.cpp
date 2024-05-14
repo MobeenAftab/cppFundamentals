@@ -8,11 +8,18 @@ Character::Character()
     height = texture.height;
 };
 
+Character::Character(int winWidth, int winHeight)
+{
+    width = texture.width / maxFrames;
+    height = texture.height;
+    setScreenPos(winWidth, winHeight);
+};
+
 void Character::setScreenPos(int winWidth, int winHeight)
 {
     screenPos = {
-        (float)winWidth / 2.0f - 4.0f * (0.5f * width),
-        (float)winHeight / 2.0f - 4.0f * (0.5f * height)};
+        static_cast<float>(winWidth) / 2.0f - scale * (0.5f * width),
+        static_cast<float>(winHeight) / 2.0f - scale * (0.5f * height)};
 };
 
 void Character::tick(float deltaTime)
@@ -61,7 +68,7 @@ void Character::tick(float deltaTime)
         rightLeft * width, // Flip sprite x direction depending on key down direction
         height};
     Rectangle knightDest{
-        screenPos.x, screenPos.y, 4.0f * width, 4.0f * height};
+        screenPos.x, screenPos.y, scale * width, scale * height};
 
     DrawTexturePro(texture, knightRec, knightDest, Vector2{}, 0.0f, WHITE);
 };
