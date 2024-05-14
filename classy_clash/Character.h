@@ -6,6 +6,7 @@ public:
     Character();
     Character(int winWidth, int winHeight);
     Vector2 getWorldPos() { return worldPos; }
+    Rectangle getCollisionRec();
     void undoMovement();
     void setScreenPos(int winWidth, int winHeight);
     void tick(float deltaTime);
