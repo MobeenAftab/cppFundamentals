@@ -62,6 +62,7 @@ int main(void)
             }
         };
 
+        goblin.setTarget(&knight);
         goblin.tick(GetFrameTime());
 
         EndDrawing();

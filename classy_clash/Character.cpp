@@ -19,7 +19,6 @@ Character::Character(int winWidth, int winHeight)
 
 void Character::tick(float deltaTime)
 {
-
     BaseCharacter::tick(deltaTime);
 
     Vector2 direction{};
@@ -45,15 +44,5 @@ void Character::tick(float deltaTime)
     else
     {
         texture = idle;
-    }
-
-    // update animation frame
-    runningTime += deltaTime;
-    if (runningTime >= updateTime)
-    {
-        frame++;
-        runningTime = 0.f;
-        if (frame > maxFrames)
-            frame = 0;
     }
 };
