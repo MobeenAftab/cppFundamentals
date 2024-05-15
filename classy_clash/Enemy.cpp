@@ -23,6 +23,9 @@ Vector2 Enemy::getScreenPos()
 
 void Enemy::tick(float deltaTime)
 {
+    if (!getAlive())
+        return;
+
     // get targets current location
     velocity = Vector2Subtract(target->getScreenPos(), getScreenPos());
 

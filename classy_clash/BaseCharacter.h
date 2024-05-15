@@ -9,6 +9,8 @@ public:
     BaseCharacter(int winWidth, int winHeight);
     Vector2 getWorldPos() { return worldPos; }
     Rectangle getCollisionRec();
+    bool getAlive() { return alive; }
+    void setAlive(bool isAlive) { alive = isAlive; };
     void undoMovement();
     virtual void tick(float deltaTime);
     virtual Vector2 getScreenPos() = 0;
@@ -32,6 +34,9 @@ protected:
     float width{};
     float height{};
     float scale{4.0f};
+
+private:
+    bool alive{true};
 };
 
 #endif

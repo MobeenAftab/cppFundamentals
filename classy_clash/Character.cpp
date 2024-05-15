@@ -22,6 +22,9 @@ Vector2 Character::getScreenPos()
 
 void Character::tick(float deltaTime)
 {
+    if (!getAlive())
+        return;
+
     if (IsKeyDown(KEY_A))
         velocity.x -= 1.0;
 
@@ -43,23 +46,25 @@ void Character::tick(float deltaTime)
     {
         origin = {0.f, weapon.height * scale};
         offset = {35.f, 55.f};
-        rotation = {35.f};
         weaponCollisionRec = {
             getScreenPos().x + offset.x,
             getScreenPos().y + offset.y - weapon.height * scale,
             weapon.width * scale,
             weapon.height * scale};
+
+        rotation = IsMouseButtonDown(MOUSE_LEFT_BUTTON) ? 35.0f : 0.0f;
     }
     else
     {
         origin = {weapon.width * scale, weapon.height * scale};
         offset = {25.f, 55.f};
-        rotation = {-35.f};
         weaponCollisionRec = {
             getScreenPos().x + offset.x - weapon.width * scale,
             getScreenPos().y + offset.y - weapon.height * scale,
             weapon.width * scale,
             weapon.height * scale};
+
+        rotation = IsMouseButtonDown(MOUSE_LEFT_BUTTON) ? -35.0f : 0.0f;
     }
 
     // draw weapon

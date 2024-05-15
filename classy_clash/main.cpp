@@ -65,6 +65,14 @@ int main(void)
         goblin.setTarget(&knight);
         goblin.tick(GetFrameTime());
 
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            if (CheckCollisionRecs((knight.getWeaponCollisionRec()), goblin.getCollisionRec()))
+            {
+                goblin.setAlive(false);
+            }
+        }
+
         EndDrawing();
     }
 
