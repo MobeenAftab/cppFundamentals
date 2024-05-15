@@ -29,6 +29,12 @@ void Enemy::tick(float deltaTime)
     // get targets current location
     velocity = Vector2Subtract(target->getScreenPos(), getScreenPos());
 
+    // stop chasing if target is within radius
+    if (Vector2Length(velocity) < radius)
+    {
+        velocity = {};
+    }
+
     if (CheckCollisionRecs(getCollisionRec(), target->getCollisionRec()))
     {
         target->takeDamage(damagePerSecond * deltaTime);

@@ -27,6 +27,19 @@ int main(void)
                  LoadTexture("characters/goblin_idle_spritesheet.png"),
                  LoadTexture("characters/goblin_run_spritesheet.png"));
 
+    Enemy slime(Vector2{250.0f, 250.0f},
+                LoadTexture("characters/slime_idle_spritesheet.png"),
+                LoadTexture("characters/slime_run_spritesheet.png"));
+
+    Enemy *enemies[]{
+        &goblin,
+        &slime};
+
+    for (auto enemy : enemies)
+    {
+        enemy->setTarget(&knight);
+    }
+
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
@@ -77,13 +90,20 @@ int main(void)
         };
 
         goblin.setTarget(&knight);
-        goblin.tick(GetFrameTime());
+
+        for (auto enemy : enemies)
+        {
+            enemy->tick(GetFrameTime());
+        }
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            if (CheckCollisionRecs((knight.getWeaponCollisionRec()), goblin.getCollisionRec()))
+            for (auto enemy : enemies)
             {
-                goblin.setAlive(false);
+                if (CheckCollisionRecs((knight.getWeaponCollisionRec()), goblin.getCollisionRec()))
+                {
+                    enemy->setAlive(false);
+                }
             }
         }
 

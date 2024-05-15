@@ -74,12 +74,8 @@ void Character::tick(float deltaTime)
 
     DrawTexturePro(weapon, source, dest, origin, rotation, WHITE);
 
-    DrawRectangleLines(
-        weaponCollisionRec.x,
-        weaponCollisionRec.y,
-        weaponCollisionRec.width,
-        weaponCollisionRec.height,
-        RED);
+    // draw weapon collision box to UI
+    // drawCollisionRectangleLines(weaponCollisionRec);
 }
 
 void Character::takeDamage(float damage)
@@ -90,4 +86,14 @@ void Character::takeDamage(float damage)
     {
         setAlive(false);
     }
+}
+
+void Character::drawCollisionRectangleLines(Rectangle rec)
+{
+    DrawRectangleLines(
+        rec.x,
+        rec.y,
+        rec.width,
+        rec.height,
+        RED);
 }

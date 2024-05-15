@@ -17,9 +17,10 @@ public:
 private:
     int winWidth{};
     int winHeight{};
+    float health{100.0f};
     Texture2D weapon{LoadTexture("characters/weapon_sword.png")};
     Rectangle weaponCollisionRec{};
-    float health{100.0f};
+    void drawCollisionRectangleLines(Rectangle rec);
 };
 
 #endif
