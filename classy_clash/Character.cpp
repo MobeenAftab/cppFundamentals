@@ -20,7 +20,7 @@ Character::Character(int winWidth, int winHeight)
 void Character::tick(float deltaTime)
 {
 
-    worldPosLastFrame = worldPos;
+    BaseCharacter::tick(deltaTime);
 
     Vector2 direction{};
     if (IsKeyDown(KEY_A))
@@ -56,14 +56,4 @@ void Character::tick(float deltaTime)
         if (frame > maxFrames)
             frame = 0;
     }
-
-    Rectangle knightRec{
-        frame * width,
-        0.0f,
-        rightLeft * width, // Flip sprite x direction depending on key down direction
-        height};
-    Rectangle knightDest{
-        screenPos.x, screenPos.y, scale * width, scale * height};
-
-    DrawTexturePro(texture, knightRec, knightDest, Vector2{}, 0.0f, WHITE);
 };
